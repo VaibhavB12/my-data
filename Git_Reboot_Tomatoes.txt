@@ -1,0 +1,219 @@
+===================================================================================
+=============  GIT REBOOT BY IHATETOMATOES YOUTUBE  ===============================
+===================================================================================
+Git is the version control system that tracks changes in source code and manages repositories locally on your computer.
+GitHub is a web-based platform for hosting and managing Git repositories online
+BASICS :
+1.git init myproject : create folder with git repository
+2.git clone https://github.com/VaibhavB12/git_tutorial.git  
+It creates folder with remote repository name NO NEED TO CREATE FOLDER BEFORE CLONE
+3.git clone https://github.com/VaibhavB12/git_tutorial.git myproject  
+This will clone repository in myproject folder instead of creating git_tutorial folder
+Working directory > git add > Staging area > git commit > Repository
+To revert git add : git rm --cached filename 
+git commit -m "msg"
+git push -u origin master : To set the upstream branch for a local branch -u or --set-upstream & "Origin" is a reference to a remote repository & master is local repository branch
+BRANCHING :
+git branch 
+git branch feature/TASK-ID-navigation : TASK-ID is for jira task which is task tracker/bug tracker
+git checkout feature/TASK-ID-navigation
+git checkout ~ : switches to last checked out branch
+git log --pretty=oneline
+
+Merge : 
+1.git checkout master : checkout to merge recieving branch
+2.git merge feature/TASK-ID-navigation
+Your branch is ahead of origin/master by 2 commits : remote repository is behind by 2 commits of local master : we need to push - git push : this will push local master changes to remote master
+git status : Your branch is up-to-date with origin/master & working tree is clean - which means local master & origin master are in sync now
+git branch -d feature/TASK-ID-navigation
+git push origin feature/TASK-ID-navigation : push local feature/TASK-ID-navigation to remote 
+
+UNDO CHANGES : video How to undo your changes in Git? Git reset
+navigation.md
+# Categories
+- Front-end
+- Back-end
+- DevOps
+# Tages
+- Git
+- React
+- Javascript
+
+# Headings
+- Line 1
+- Line 2
+- Line 3
+readme.md
+# vscode-demo
+1.Unstage file after staging or after git add : 
+git reset filename : unstage one file
+git reset HEAD	:  unstage all the staged files keeping changes
+git reset --hard HEAD : unstage all the staged files removing changes/files 
+2.Revert a file from specific commit (older commit):
+git diff commit-id : shows difference between current working directory & commit-id specified
+green is what we added & red are what we removed  
+git checkout commit-id filename : revert file to specific commit-id
+Discard changes in working directory :
+git reset HEAD : unstage all the staged files keeping changes
+git restore filename :  
+Bring back chunk of the code from previous commit-id :
+git checkout d5df789 navigation.md -p > s(split change) > y(yes for first half changes) > n(no for other changes)
+Bring back only certain lines from previous commit-id :
+git checkout d5df789 navigation.md -p > s(split chang) > e (manual editing mode) > delete - to keep lines
+
+GIT CONFIG :
+Local : .git/config	: only for single repository, applied to specific repository
+Global : $home/.gitconfig : apply to all the git repositories, applies to logged in user on computer
+System : /usr/local/git/etc/gitconfig : apply to all the users of laptop & all the repositories
+Order of reading these files : System > Global > Local : i.e all the local changes override previous configs
+git config --list : list all local,global,system
+git config --list --local  : list only local
+git config --list --global : list only global
+git config --list --system : list only system	 
+git config --local --edit 
+git config --local --edit 
+git config --local --edit 
+Custom commit message :
+create file .gitmessage.txt in home folder of user > add your custom message
+git config --global commit.template ~/.gitmessage.txt
+git commit
+Alias git log -1 HEAD command : Which shows last commit
+git config --global alias.last 'log -1 HEAD'
+git last : this alias shows the last commit
+
+Simple merge conflicts : Merging two branches that have changes in the same lines in same files can create merge conflicts
+
+vi 
+git branch --contains <commit-hash> : list all the branches that contain the specified commit.
+On master create context.txt > 
+red 
+green 
+blue
+git add .  >  git commit -m "context.txt created"
+git branch my-branch
+git checkout -b his-branch
+vi context.txt > add following
+john 
+michael 
+git add .  >  git commit -m "names added to context.txt" 
+git switch my-branch
+vi context.txt > add following
+yellow
+white
+git add .  >  git commit -m "colors added to context.txt" 
+git merge his-branch
+	Conflicts occurs here if you dont want to merge abort it by below command
+	git merge --abort
+To resolve this conflict :
+vi context.txt
+Here all the content in between "=======" & "<<<<<<< HEAD" is changes from current branch my-branch (merge receiving branch) and all the content in between "=======" & ">>>>>>>" is changes from incoming branch his-branch (merge doing branch)
+delete which changes which you dont want & save file
+git status 	: You have unmerged paths
+git add .
+git commit "merge conflict resolved"
+To resolve above conflict using diff3 :
+before merging run > git diff his-branch
+green are changes in my-branch & red are changes in his-branch
+or using diff3 which is 3 way merge tool
+before merging run > git config merge.conflictstyle diff3
+git merge his-branch
+vi context.txt
+delete which changes which you dont want & save file
+git status 	: You have unmerged paths
+git add .
+git commit "merge conflict resolved"
+
+GIT REBASE Vs MERGE :
+A B C commits on my-branch
+& A B AA BB commits on his-branch 
+git switch my-branch
+git rebase -i his-branch > wq!
+we will see A B C AA BB all commits 
+
+Dont rebase public branches like master
+
+Undo rebase using git reflog & reset :
+Rebase allows you to move or combine a sequence of commits from one branch onto another branch.
+git reflog :  reference log that contains a record of all the actions you've performed in your Git
+repository. It provides a detailed history of branch checkouts, commits, merges, rebases, and other operations 
+git rebase his-branch
+git reflog > copy commit-id from where you want to reset
+git reset commit-id-copied
+
+SQUASH COMMITS : add multiple commits into one commit
+A B C are 3 commits in my-branch
+git rebase -i HEAD~3	: rebase last 3 commits
+replace pick with s of 2nd & 3rd commit i.e A & B  > wq > comment B & C messages and single message for A
+as squash commit > wq
+git log 
+
+cherry pick : it picks only one commit from merge doing branch(his-branch) while rebase picks all the commits from merge doing branch(his-branch) 
+his-branch has A B AA & BB, from which we just want to add AA commit to my-branch (my-branch has A & B )
+git checkout his-branch
+git log > copy commit id of AA 
+git checkout my-branch
+git cherry-pick paste_commit_id_of_AA : this commits automatically
+git log : you will see A B & AA commits NOT BB
+Cherry-pick without commit :
+git cherry-pick paste_commit_id_of_AA -n : this will not commit changes it puts changes in staging area
+git commit -m "cherry picked changes"
+
+Git stash : Git allows you to temporarily save changes that you have made to your working directory but are not ready to commit yet.You can switch to a different branch or work on a different task without committing your current changes.
+git switch my-branch > touch a b c > git add .
+git status
+git stash 		: save tracked changes only
+git stash list  :
+git stash show 0(index) : what is inside stash 0
+git stash show -p 0 	: show changes in tree view
+git stash apply 0 
+
+git switch his-branch > touch a b c 
+git status
+git stash -u   : stash untracked changes also
+git stash list
+git stash show 0(index) : what is inside stash 0
+git stash show -p 0 	: show changes in tree view
+git stash apply 0
+git stash push -m "updated text"  : create stash with custom message
+git stash branch new-branch 0 	  : create branch from stash index
+git stash pop		: take last stash & apply to working directory
+git stash clear 	: delete all stashes in list
+
+git bisect :
+git bisect start
+git bisect bad
+git log > copy commit-id where you think app is working correctly (1 day 1 week old commit where app is working)
+git bisect good commit-id : check if app is working, if its not working try below
+git bisect bad 			 : this will check out another one check if it is working
+If you dont want to revert changes : git bisect reset - we will go to commit before git bisect start
+let us say app is working fine & we want to revert the changes
+git bisect good 	> copy commit-id
+git show commit-id_of_above_good
+git revert commit-id_of_above_good  > add message > wq
+
+1.change message of oldest commit :
+git log 	: commit id of oldest commit
+git rebase -i --root > find the commit & replace pick word by reword > wq! > enter new commit msg > wq!
+git commit --amend	: to changes commit message of recent commit used when : 1. Commit message type error 2. when we forgot to add a file while git add
+Undo the local commits : IMP ONLY LOCAL COMMITS :
+git reset HEAD-2 : undo last 2 commits and keep changes i.e files associated with those commit remains there
+git reset --hard HEAD-2 : undo last two Commits,discard changes i.e files associated with those commit gets deleted
+3.Remove a file from GIT without removing from the file system :
+If you are not careful, you may add some unnecessary files during git add. 
+If you try to use git rm, it will remove the file from both the staging area as well as the file system
+git reset filename	OR git remove --cached filename
+echo filename >> .gitignore	: avoid readding in future
+4.Reverting pushed commits :
+git revert commit_ID : reverts the commit with the specified id
+git revert HEAD^ : reverts the second to last commit
+git revert <earliest_commit_hash>..HEAD : reverts a whole range of commits
+If you don’t want to create additional revert commits after reverting : git revert -n HEAD
+git config --global rerere.enabled true/false : Add it to your global config to enable it for all projects
+enables the "reuse recorded resolution" feature in Git, also known as "rerere." This feature helps Git automatically remember and reuse resolutions to previous conflicts, making it easier to handle similar conflicts in the future.
+5.Find a commit that broke something after a merge
+Sometimes there is a need to find a commit that changed the project wrongly. This bad commit is difficult to find and hence consumes a lot of time.
+ git bisect start         // starts the bisecting session
+ git bisect bad           // marks the current revision as bad
+ git bisect good revision  // marks the last known good revision
+git branch -rv
+HEAD refers to latest commit in current branch 

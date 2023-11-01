@@ -1,0 +1,624 @@
+We isolate our services.Now, when I'm saying here services, I mean services likeTomcat or Apache or NGINX or MySQL, any kind of
+service that we run on the operating system.Well, we like to isolate our service.
+What does it really mean by isolate? Well, if we are setting up an infrastructure or application stack.We will set up web
+service on a different operating system, on different machine like NGINX on a different machine, Tomcat on a different machine, MySQL on a different machine.
+We can take a big machine andput all the services in that.But then the services are not isolated.They will be interfering with each
+other's business like their libraries binaries or their configuration or resources,Ram,CPU will be shared, same process tree
+so they'll be interfering with each other.So we isolate our services and for high availability we put them into multiple servers.
+And to isolate our service to host our application, we need the infrastructure, We can use virtual machines or cloud computing.
+Even in cloud computing we'll be using instances which will be again VMs.So every VM will have its own operating system.
+We run the service on that and then it is isolated.So your operating system is the boundary to isolate it.
+Now because of isolation we end up setting up multiple VMs or instances or multiple servers.But we have to do that to achieve high availability, performance, security.VMs or the ec2 instances we are talking will be overprovisioned.Like if we need let's say five GB of Ram, will go for eight GB of Ram, some extra RAMs, memory.So in case if our service needs more resources, it's available because it's not good for business that your application is down.So it's always a good idea to over provision it.
+Now because of all this it results into high capital expenditure and high operational expenditure.You have to upfront purchase things like if we talk about operating system, licensing of multiple operating systems you have to purchase, then there will be operational
+expenditure, regular maintenance, cost, cooling power, admin team, operations team to manage all that.So VMs are expensive, that is for sure.Every VM needs its own operating system and operating system means we need to do maintenance to it.We need to do all the
+nurturing .Operating system needs licenses if you're going with licensed operating system.And also operating system takes time to boot.So like for example in an auto scaling group, the instances scale automatically, but it takes time to come up complete operating system is booted and then the service comes up.Now, VMs are portable.We can move VMs from one place to other place, right?
+It's nothing but set of files.So you can move it from cloud to local, local to cloud, but they're bulky.
+Like if you have to move the entire stack.Let's say you have five to seven services,so you need five to seven images.And that images distributing is possible, but because of its huge size, it's not possible to distribute to everyone.VM is running the operating system and operating system needs resources, ram, CPU, network,disk, space, all of that.
+And remember, all this we are doing so we can isolate our service.
+
+few other points or all the other points.
+1.Isolating services are important and we need operating systems for that.Operating system creates the boundary for isolation.
+2.We want high availability, so we will need multiples of the VMs, like multiple NGINX, multiple Tomcat, multiple RabbitMQ.
+That is increasing the cost more further.
+3.Now, portability matters to this time.How about I'm able to ship the entire image every time I'm making changes, instead of doing all the automation and provisioning everything from the scratch.Instead of that, how about for every change we have the image and we can distribute it.Images can be directly replacing your existing VMs.In dev QA staging production environment it is easier, but
+because of VMs bulky size, we cannot do it.
+4.And all this raises the capital expenditure and operational expenditure and all this for isolation.
+
+How about we can isolate our services without operating system?
+Of course they'll be running in an operating system.Let's say in one operating system, like one VM, you're running multiple services as you do, but they're isolated.You can alert them or restrict or set quota on the Ram CPU.Every process have their own libraries and binaries to use.So no interference.
+Now, so far the only way we're talking about is virtual machine.You can have multiple virtual machines in a computer and so they are isolated.But again, every virtual machine needs operating system.And then goes all the stories that we talked about.Imagine without operating systems.
+Think about hollow VMs that does not have operating system, but they have the process running 
+
+Containers :
+We are talking about containerizing a process.We are running a service. What does that mean? It runs some processes and you're running other services.Those services will also run the process, but they interfere. But if we can create a boundary in between
+them, that means we are containerizing the process.We are isolating our processes, right? And isolated in a directory.So all the libraries, binaries, configuration it needs is available in that directory from where it is running.And imagine other things like giving IP addresses to the directory, like we have IP address to the virtual machine.
+
+The container is really a kernel trick.Your processes will be running on the same operating system but they'll be still isolated.
+So to begin with, instead of going into too much technicality, let's understand it at a very high level.
+A process that is isolated in a directory and it uses some technical concepts like namespace and Cgroup and all the necessary libraries and binaries,Let's say we're running Vprofile application which needs Tomcat and Tomcat needs JDK.So all this Tomcat, JDK, everything is in that directory from where Vprofile process is running.And imagine the directory has an IP address.So you can have a directory running Tomcat, anotherdirectory running MySQL and then you can connect through each other because they have IP addresses.
+
+Now, keep in mind, container is a kernel trick.There's no magic about it.Of course it needs the resources, it needs Ram CPU as any process would need.So every container that is running in the operating system, all these containers are going to
+share the operating systems kernel and kernel will provide the right resources to the process.And because of that is happening, you don't need a separate operating system running in the container.
+So container you can also treat like a package which has all the necessary things.A standard unit of software that contains the
+code that you want to run, all the dependencies that it needs, but it does not have the operating system 
+
+Docker documentation.
+It's a standard unit of software.You can think of using it for packaging your software 
+"Package software into standardized units for development, shipment and deployment"
+Now, container does not have operating system so it's easy to ship also and easy for the deployment. Container is just a process and it doesn't take long time to bring up a process compared to a virtual machine complete booting process.
+
+Left hand side image you have is the infrastructure, the container. Right hand side you have the virtual machine architecture.
+So of course both need infrastructure like a computer.Think of this is one computer, it's another computer,And you have an operating system running and on top of operating system you'll be having hypervisor like Oracle VM VirtualBox or VMware ESXi or Zen hypervisor.
+Now this hypervisor will let you create or run virtual machines.So on that you create virtual machine.Every virtual machine will have an operating system.It will have your application running and you need all the necessary binaries and libraries.So you can run, let's say three virtual machines in the computer.
+Compared to Container technology so again,you need the computer, you'll have some operating systemand you will have Docker engine.
+Now, Docker is not the only container runtime environment you have some other also but here we are taking example of Docker only it's a very lightweight service that does the kernel trick that will help you run your containers the containers are running on it, right?
+App A, app B, app C, app D you can run many containers because they don't have opening systems so they're not going to consume extra resource,So the image depicts itself here you have three virtual machines compared to that you can have six containers I think you can even have more than that because containers are lightweight, they are just processes.
+
+VM VS CONTAINERS :
+Understand this container offers isolation and not virtualization.So calling container virtualization is technically wrong but for understanding purpose you can call container as OS virtualization just for understanding.
+Virtual machine is hardware virtualization, you get virtual Ram, virtual CPU, virtual disk so you can install your operating system on
+that so for operating system the hardware is virtualized that's virtual machine.For a process to run, you need operating system
+but as we already established, containers don't have operating system but process needs to run on operating system
+so containers or kernel does some trick and bluffs your process which is running in a directory that this directory is an operating system which in reality is not.
+VM needs operating system and containers don't need operating system that's the biggest difference 
+For computer resource, container uses host operating system resources
+
+What is Docker? Container directly doesn't mean docker or docker directly doesn't mean container you can call Docker container.Docker actually manages your containers so it is called as container runtime environment.
+You can run container without Docker but then you have to create the whole directory, the dependencies Cgroup namespace you have to take care of all that yourself and you run your process in that, that's how you can run a container but that's too much work so
+Docker made our life easier we can run containers very easily by using Docker engine.
+
+History of Docker ?
+Docker was previously called as DotCloud incorporation and it was into platform as a service business just like our beanstalk it's platform as a service you upload our artifact and it runs for us and it was using AWS ec2 instances to run its customers or its users application but not like directly easy to instance operating system it uses LXCs Linux containers before even Docker came or other
+container runtime environment came there was just LXC.
+So where let's say our vprofile application for example, if you want to host.And we will need, we have like five service.
+So five plus five for high availability.We'll need ten EC2 instances to run our application.And if you go to DotCloud,they will run it on the containers.So maybe using two, three EC2 instances and distributing your containers across them.
+While doing that, they of course are saving a lot of money because they're using containers instead of VMs.And while they're doing it, they have developed a lot of tools that can manage containers like docker engine, docker build processes, docker compose.They created nice tools.But their business failed.Maybe the world was not ready that time for PASS business or whatever the history is any reason the business failed.
+So what they did, they create whatever tools they created to manage the containers they made it open source and they named the project as docker.The word docker is derived from dock worker.
+It was really very inspiring idea.That's going to save a lot of money.So obviously they got funding and business started
+growing and they changed the name of the company from dot cloud incorporation to docker incorporation.
+
+What's Docker?
+Well, docker incorporation is the name of an organization or company.They created the best product for to manage container, which is docker engine.It's container runtime environment that can help you manage your container much better and much easier.So a lot of automation will be done by docker engine.
+There is also opensource project.Docker still is an open source project.You can check that it's on GitHub.
+So docker engine is a daemon,it's a service running in the operating system.And you can connect it by using Rest API or the CLI command.
+The main USP of Docker or main powerhouse are its images.You really don't need to create containers from the scratch.
+There are a lot of images available.You can use them or you can even customize those images.I think that's the reason why it became so popular.Because it was easy before images, it was very difficult to create a container.And there's nothing new about container technology.If you check its history, it's got more than decade old.But docker engine came like in 2013, 14, I guess in 2013.
+If you check the container history, you'll find it's been a very old technology.But because of the difficulty to run and manage it, we are not using it.But then docker solved all this problem.
+The main thing that it did, it has images.You can just pull the image and you can run the container from that.And you can do that from simple docker commands.You can connect data volumes to save or preserve your data.You can create your networks like you create VPC.
+You can create your own network in the containers or for the containers.
+
+Docker containers that run on Docker Engine 
+1.It's standard - They created standard images standard containers can run from that standard year really means they are portable they
+can run it on any hardware, any operating system as long as you have docker engine installed you can run the containers so it will be their QA environment or production environment same thing you don't need to make any change, you just need to have the docker engine 2.It's lightweight -
+Since it shares the machine's operating system kernel it does not need operating system for its own process and that's how it gets higher efficiency and reduces the cost of licensing of operating systems and the other cost associated to run a server 
+3.It's secure -
+its applications are safer in containers and the docker provides the strongest default isolation capabilities and that's actually
+the main reason why we started using container it offers isolation without operating system 
+
+You have to choose Linux or Windows.On Linux you can run only Linux containers.On Windows you can run only on Windows containers.
+since the process running in the container uses the host operating system kernel and if the process needs Windows kernel you need to run it on Windows machine.If the process needs to use Linux kernel you need to run it on Linux machine 
+Running Windows container on Linux machine is not possible.
+But there is docker desktop which is for Windows and you can run Linux container on that but don't get confused what it really does is in the Windows machine it creates a Linux VM and on that your Linux container gets executed so it's still running linux container is still running on Linux machine
+
+002 Docker engine install
+Launch EC2 with name DockerEngine Ubuntu 18 > Tags : Name Docker-Engine > SG : Docker-SG SSH TCP 22 MyIP > Launch
+sudo -i
+sudo apt update
+sudo apt install apt-transport-https ca-certificates curl software-properties-common gnupg-agent
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+apt-cache policy docker-ce     : ce means community edition, ee means enterprise edition
+sudo apt install docker-ce
+sudo systemctl status docker
+docker images
+logout from root
+whoami
+docker images   : it will not run we need to add this user in docker group
+sudo usermod -aG docker <user>
+id <user>
+docker images   : it will still not run logout ssh & reconnect server
+docker run hello-world	: download hello-world from docker hub & run container from that image & this container run 
+						  a script & die
+docker images		: you will see hello-world image
+					REPOSITORY TAG IMAGE ID CREATED SIZE	
+docker ps -a 		: list all running containers & dead containers 
+					CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+docker ps 			: list only running containers
+					CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+hello-world is short lived container,also if you want to archive logs & send it to logging dashboard(using ELK stack,splunk)
+we can have continuously running containers also, for eg. for running Apache service, for running Tomcat service, 
+for running MySQL service 
+
+003 
+hub.docker.com - registry for docker images 
+What is docker image : Images become containers when they run on Docker Engine
+1.Docker image is a stopped container(like AMI) 
+2.It consists of multiple layers : layers of data like if installed git package a layer is created, created directory is
+ another layer and so on. These layers are only in read only mode & they have their own file system format
+3.We bundle our app in the image
+4.Container runs from the images : You cant remove the image if container is running on it. NEVER REMOVE IMAGE IT WILL 
+DELETE CONTAINER. Its not like VMs from iso, if iso gets deleted still VM work
+5.Images called as repositories. Like Tomcat repository in docker hub registry
+Registries : 
+1.Cloud based registries : for creating registry on cloud 
+	Dockerhub, Google GCR, Amazon ECR 
+2.Local registries : for creating registry locally
+	Nexus 3+, Jfrog Artifactory, DTR(Docker trusted registry)
+
+/opt/data - container store image data & access image data from this folder. Containers does not replicate entire image.
+It uses eufs file system
+Container is a thin read-write layer & all the data in container is from its image.
+docker run <image> :
+
+docker pull nginx
+docker images
+docker pull nginx:<tag>		docker pull nginx:mainline-aipine-perl
+docker run --name <container_name> <image_name>  : it creates container from image
+docker run --name myweb nginx
+docker run --name myweb -d nginx : d means detached,container runs in background continuously doesnt get destroy 
+								   automatically like hello-world
+docker run --name myweb -p 7090:80 -d nginx  : <host_port>:<container_port> host_port should be free & container_port depends 
+											  on which port service runs like Tomcat runs on 80 port
+sudo netstat -tulpn | grep LISTEN	: check host_port free or not
+sudo netstat -tulpn | grep 7090
+sudo ufw enable	sudo ufw allow ssh
+Docker SG > All traffic MyIP > save
+In browser - PublicIP:7090		: Nginx running from container
+docker stop <container_name>/<container_ID>
+docker ps -a 	: Status exited
+docker stop <container_name>/<container_ID>
+docker ps -a 	: Up about ...
+ps -ef | grep nginx 		: you will see 2 processes running master & worker process
+sudo -i
+docker ps -a 
+cd /var/lib/docker/containers/<container_id> : resolve,conf for resolving container names 
+Containers runs directly from the images. Nginx web page is directly coming from the image. 
+Containers does not have any data.
+Container is the process running from directory and all the data of container coming from the image.
+du -sh /var/lib/docker/containers/<container_id> : in just KBs, it contains only configuration files NOT data
+du -sh /var/lib/docker/image/overlay2
+Run commands on container from host machine :
+docker exec <container_id>/<container_name> command
+To get attach to container or get into the container :
+docker exec -it <container_name>/<container_id> /bin/bash 
+OR
+docker exec -it <container_name>/<container_id> /bin/sh
+get inside container and > apt update -y && apt install procps -y
+						   ps -ef : this will show all processes inside the containers
+exit OR ctrl + d : exit container
+To remove image : 1.Stop container docker stop <container_id>/<container_name> 
+				  2.Remove container docker rm <container_id>/<container_name> 
+				  3.Remove image docker rmi <image>
+docker pull ubuntu
+docker run ubuntu
+docker ps -a : we see ubuntu container in Exited state, it started & its dead
+IF YOU WANT TO RUN CONTAINER CONTINOUSLY :
+docker run -it ubuntu /bin/bash : now we are inside the container
+ps -ef : we see /bin/bash process 
+when you exit container it kills /bin/bash which is main process for ubuntu. For nginx it is nginx process when we
+exit from container it kills that nginx main process
+
+004
+docker pull nginx
+docker images
+docker inspect nginx 		: metadata of image in JSON format check options CMD & Entrypoint, 
+							when you docker run <image> it runs script in the Entrypoint & then command in CMD
+docker run -d -P nginx 		: -P port mapping of host done automatically, this command executed CMD & Entrypoint from 
+							nginx image but we cant see its output, to see output we use below command
+docker logs <container_name>/<container_id>
+docker run -P nginx			: this runs CMD & Entrypoint commands foreground, but when we exit it destroys container 
+docker ps -a 				: we will see status Exited of container
+docker run -d -P mysql:5.7	: 
+docker ps 					: we dont see running container here 
+docker ps -a				: we see mysql container with Exited status, to see what is the problem we check logs
+docker logs <container_name> : ERROR : database is uninitialized & password option is not specified, we need to set variable
+docker run -d -P -e MYSQL_ROOT_PASSWORD=mypass mysql:5.7 : -e for setting variable
+docker ps 					: 
+The output of process of a container is docker logs. Used to troubleshooting
+
+005 Volumes
+Containers are volatile because they are disposable.
+To add package or configuration file into container :
+	1. We add package or configuration file in image first
+	2. We delete old container & create new container from updated image 
+When we delete container all the data also gets deleted. But for stateful containers like mysql we need to store data.
+To store data from container we use container volumes.
+Docker has 2 options for containers to store data on host machine :
+	1.Volumes : Its a wrapper. In docker volume directory it will create a directory & then we attach 
+	that to container. All the data from container directory going to the volumes which is in your host machine.
+	/var/lib/docker/volumes/
+	2.Bind mounts : Mapping any directory from host machine to container directory.So if we want any change in
+	container, we make changes in host machine directory & those changes will reflect in container automatically
+2.Bind mount : mostly used to inject data from host machine to container.For e.g code that developer writes on host
+machine & changes reflected in the container
+Go to dockerhub > search mysql > select official image > find in page How to use this image & Caveats where we find 
+path where container store data which is volume
+docker pull mysql:5.7
+docker inspect mysql	: check out cmd, Entrypoint, ExposedPorts & Volumes which is /var/lib/mysql
+mkdir /home/ubuntu/mydbdata	: create on host machine /home/ubuntu/mydbdata 
+docker run --name mydb -d -e MYSQL_ROOT_PASSWORD=mypass -p 3030:3306 -v /home/ubuntu/mydbdata:/var/lib/mysql mysql:latest
+docker run --name <container_name> -d -e <VARIABLE> -p <host_port>:<container_port> -v hostMachine_directory_path:container
+_directory <imageName:tag>
+ls mydbdata 	: we will see all the data from /var/lib/mysql directory of the container
+docker exec -it mydb /bin/bash
+docker exec -it <container_name> /bin/bash : check cmd from docker inspect image_name, it will show which bash shell 
+using this container
+cd /var/lib/mysql	: we will see same data as /home/ubuntu/mydbdata
+docker stop mydb
+docker rm mydb
+ls /home/ubuntu/mydbdata 	: even if you delete the container , data exists in /home/ubuntu/mydbdata
+
+1.Volumes : used when you want to preserve data of container to the host machine
+docker volume create myvolume
+docker volume ls
+docker run --name <container_name> -d -e <VARIABLE> -p <host_port>:<container_port> -v volume_name:container_directory 
+ <imageName:tag>
+docker run --name mydb -d -e MYSQL_ROOT_PASSWORD=mypass -p 3030:3306 -v myvolume:/var/lib/mysql mysql:latest
+docker ps 
+sudo -i
+ls /var/lib/docker/volumes/mydb/_data	: we will see same data as /var/lib/mysql directory of container
+docker inspect <container_name>/<image_name> : inspect command works both for containers & images, give JSON data
+docker inspect mydb	: container ID, Created, Path, Pid in host machine, image from which container created, LogPath where
+it stores logs. Binds myvolume binded with /var/lib/mysql, PortBinding 3306 mapped with 3000, Mounts - RW:true, ExposedPorts,
+Env, Cmd, Entrypoint, IPAddress of container, MYSQL_ROOT_PASSWORD
+docker logs mydb 
+ping containerIP_from_inspect_command
+mysql -h containerIP -u root -p secretpass  : mysql should be install on host machine
+
+006 Build docker images : we build docker image from Dockerfile. Like artifact created from pom.xml.
+Dockerfile instructions :
+	FROM : Base image Take official image from dockerhub
+	LABELS : Adds metadata to an image, these are like tags in aws 
+	RUN : execute command in a new layer & commits results, Like install package, create directory/file
+	ADD/COPY : Adds files & folder to image, Copy will just take a file and dump it, Add we can put link in archive 
+	then download file from link & put it in image
+	CMD : what binaries gets executed when docker run
+	ENTRYPOINT : Allows you to configure container that will run as a executable. CMD has higher priority over ENTRYPOINT while execution
+	VOLUME : Creates mount point & mark it as holding externally mounted volumes, Which volume you want to export
+	like /var/lib/mysql
+	EXPOSE : Container listen on specified port here, Mention binary in CMD creates a process & that process gets 
+	binded to a port number
+	ENV : sets enviornment variable
+	USER : sets username (UID), which user will be running the process
+	WORKDIR : sets working directory, when you do docker exec & mention any command that command will run in this directory
+	ARG : Defines variables that user can pass at build-time
+	ONBUILD : when you are going to use this image as the base image when you are building new image, we can specify
+	any instruction/command here & that command runs when this image used as a base image
+mkdir images && cd images
+go to tooplate.com take a template from their & run that template on Apache2 service running in ubuntu container
+tooplate.com > nano folio > f12 > click on download > copy link from Request URL
+mkdir nano
+wget paste_link
+unzip nano_folio.zip
+cd nano_folio
+tar czvf nano.tar.gz *	: we need archive in tar format
+mv nano.tar.gz ../
+cd ..
+rm -rf nano_folio.zip nano_folio
+mv nano.tar.gz nano/
+cd nano
+vim Dockerfile
+	FROM ubuntu:latest
+	ENV DEBIAN_FRONTEND=noninteractive : dont stop Dockerfile while running, ineractive docker build process fail so make it noninteractive
+	LABEL "Author"="Vaibhav"
+	LABEL "Project"="nano"
+	RUN apt update && apt install git -y
+	RUN apt install apache2 -y
+	CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]  : must use binary path 
+	EXPOSE 80
+	WORKDIR /var/www/html							  : 
+	VOLUME /var/log/apache2
+	ADD nano.tar.gz /var/www/html
+	#COPY nano.tar.gz /var/www/html
+docker build -t nanoimg .		: must run this command from where Dockerfile situated
+docker images : we see our image nanoimg
+docker run -d --name nanowebsite -p 9080:80 nanoimg
+docker ps
+In broswer > paste IP of EC2 with port 9080 you will see homepage of wavecafe
+Create account on dockerhub add repository docker_images
+To push image on dockerhub image name must be dockerhub_accountName/image_name
+docker build -t vaibh1205/nanoimg .	
+docker images : both nanoimg:latest & nanoimg:v2 have same Image id
+docker login https://registry-1.docker.io/v2/ > Username vaib1205 Password Boto1205
+docker push vaib1205/nanoimg:v2	: you will see nanoimg repository on dockerhub 						
+docker ps -a
+stop & remove all the containers & images created (to remove image must use tags)
+docker run -d --name nanowebsite -p 9080:80 vaib1205/nanoimg:v2
+docker ps
+In broswer > paste IP of EC2 with port 9080 you will see homepage of wavecafe which is made by your custom docker image
+from dockerhub
+
+007 Entrypoint & Cmd
+mkdir cmd entry entrycmd
+touch cmd/Dockerfile entry/Dockerfile entrycmd/Dockerfile
+vim cmd/Dockerfile
+	FROM ubuntu:latest
+	CMD ["echo", "hello"]  : CMD is place where we give binary & CMD start the container process, Here echo is shell command & hello is argument to echo command
+docker build -t printer:v1 cmd/
+docker images
+docker run printer:v1
+
+vim entry/Dockerfile
+	FROM ubuntu:latest
+	ENTRYPOINT ["echo"]	 : we dont have any argument here 
+docker build -t printer:v2 entry/
+docker images 
+docker run printer:v2	: it prints empty line coz echo command doesnt have any argument that means user has to pass the argument
+docker run printer:v2 hello	: it prints hello, coz we provided argument for echo command while executing run command
+In Dockerfile or when you inspect docker image, if you find any ENTRYPOINT have command without argument that means user needs to pass the argument while creating container 
+
+vim entrycmd/Dockerfile
+	FROM ubuntu:latest
+	ENTRYPOINT ["echo"]
+	cmd ["hello"]
+	# ENTRYPOINT & CMD mostly together used for 2 purpose :
+	1.If you need command in ENTRYPOINT & argument in CMD
+	2.If you have some script that executes & initialize something & you want to run it first for that use ENTRYPOINT and then your actual command that starts container process will be in CMD
+docker build -t printer:v3 entrycmd/
+docker images
+docker run printer:v3 : it prints hello
+docker run printer:v3 hi : it prints hi we can override argument hello with hi
+docker run printer:v3 hello : it prints hi we can override argument hello with hi
+IMP : IF ENTRYPOINT & CMD USED TOGETHER THEN CMD WILL HAVE DEFAULT ARGUMENT WHICH USER CAN OVERRIDE. AND ENTRYPOINT HAS HIGHER PRIORITY OVER CMD.
+
+008 DOCKER COMPOSE : Is a tool to run multi container together> You have a YAML file where you mention all the 
+container information & say docker compose up. Same as vagrant, vagrant is for VMs, docker compose for containers
+https://docs.docker.com/compose/install/linux/
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+https://docs.docker.com/compose/gettingstarted/
+mkdir composetest && cd composetest
+vi app.py
+# web container when we run itin browser it returns Hello World! I have been seen {} times
+	import time
+
+	import redis
+	from flask import Flask
+
+	app = Flask(__name__)
+	cache = redis.Redis(host='redis', port=6379)
+
+	def get_hit_count():
+		retries = 5
+		while True:
+			try:
+				return cache.incr('hits')
+			except redis.exceptions.ConnectionError as exc:
+				if retries == 0:
+					raise exc
+				retries -= 1
+				time.sleep(0.5)
+
+	@app.route('/')
+	def hello():
+		count = get_hit_count()
+		return 'Hello World! I have been seen {} times.\n'.format(count)
+Flask and Redis for creating a web application with a hit counter. The code initializes a Flask application, connects 
+to a Redis server, and defines a route / with a corresponding view function hello(). The hello() function increments 
+a hit counter stored in Redis and returns a response displaying the number of times the route has been visited
+vi requirement.txt
+	flask
+	redis
+#These are python application dependencies, while we build it, it installs these dependencies 
+vim Dockerfile
+# syntax=docker/dockerfile:1
+	FROM python:3.7-alpine
+	WORKDIR /code
+	ENV FLASK_APP=app.py
+	ENV FLASK_RUN_HOST=0.0.0.0
+	RUN apk add --no-cache gcc musl-dev linux-headers
+	COPY requirements.txt requirements.txt
+	RUN pip install -r requirements.txt
+	EXPOSE 5000
+	COPY . .
+	CMD ["flask", "run"]
+alpine is lightweight linux container.
+COPY . . means content of current working directory will be copied to /code
+vim docker-compose.yml
+	services:
+	  web:
+		build: .
+		ports:
+		  - "8000:5000"
+	  redis:
+		image: "redis:alpine"
+2 containers here, web container is build by Dockerfile (build: . is Dockerfile path)& redis container is build by 
+redis image  
+docker-compose up
+First it creates a network then it will build your container  
+EC2 > DockerEngine > SG > All traffic MyIP
+Paste public IP with 8000 port > You will see Hello world i have been seen 2 times
+if its not working then go to composetest directory & run docker-compose up command again  
+docker compose down : bring down all the containers created by docker-compose
+docker ps -a
+docker images
+vim docker-compose.yml > add this code below ports
+	volumes:
+		  - .:/code
+	environment:
+		  FLASK_ENV: development
+docker-compose -d
+docker-compose top	: shows PID PPID & commands that container running
+Dockerizing or containerizing means you have to write Dockerfile & docker-compose.yml file
+
+009 Containarizing project :
+Fetch source code from our git repository 
+Write Dockerfile for the services that need customized. We have Nginx, Tomcat and MySQL. So we have to write 3 Dockerfiles Use a docker build command which will get executed on our docker engine. 
+In our Dockerfile we have mentioned the base image. These base images will be pulled from Docker Hub so Tomcat, Nginx and MySQL these are three images that we are going to pull and customize them. So docker build command is going to read the docker file, build our image. Once our images are ready we're going to use
+a docker compose, we'll mention all the containers with the images and then we are going to test it. Once it checks out fine then we are going to push our docker images, the customized docker images to Docker Hub in our own account
+ 
+010 Multi-stage docker files :
+git clone -b docker https://github.com/devopshydclub/vprofile-project.git
+cd vprofile-project
+cd Docker-files
+cd app
+cat Dockerfile
+If we do build in Dockerfile image size will be huge, but we should not have build & app image in same Dockerfile to keep docker image small.We could build the artifact seperately on host machine & then copy that artifact but it is manual process.We neither do build & Dockerfile nor we want to create artifact manually so the best option is USE MULTI STAGE DOCKER FILE 
+We should not have build artifact & artifact in same docker image
+mkdir multistage
+vi Dockerfile
+# This is our build image
+FROM openjdk:8 AS BUILD_IMAGE
+RUN apt update -y && apt install maven -y
+RUN git clone -b vp-rem https://github.com/devopshydclub/vprofile-project.git
+RUN cd vprofile-repo && mvn install
+# This is our app image
+FROM tomcat:8-jre11
+RUN rm -rf /usr/local/tomcat/webapps/*
+COPY --from=BUILD_IMAGE vprofile-repo/target/vprofile-v2.war /usr/local/tomcat/webapps/ROOT.war
+EXPOSE 8080
+CMD ["catalina.sh", "run"]  #catalina.sh script used to start tomcat server
+
+docker build -t appimg:v1 .
+docker images : we see appimage upto size of 400mb & build image of size above 1 GB
+We reduced the footprint of our app image & also automated entire build process by using multistage Dockerfile. Wherever there is a build we must use multistage Dockerfile
+
+011 Containarizing Microservice Project :
+insert image 29 from F:/Notepad++ images
+Total 4 services in this project
+Nginx : is API gateway which is front-end. All the communication between microservices happens through API gateway.Nginx listen for the request & routes the request based on the headers/URLs. If the request comes on / then it sends to client microservice which is written in Angular.This loads the front end pages of the website. For backend service its going to contact URL /api which is written in NodeJS & the service is Emart API. NodeJS need database which is MongoDB. There is also another service Books API which is written in Java which uses /webapi URL & MySQL database
+git clone https://github.com/devopshydclub/emartapp.git
+All microservices source code is in one repository & these kind of repositories are called as mono repo.We can segregate these into seperate repositories like seperate repository for client,seperate repository for javaapi & seperate repository for nginx & seperate repository for nodeapi.This will be beneficial when creating seperate CICD pipeline for all of them. So every microservice have its own CICD pipelines.This promotes more gitops.
+How we containarize microservice stack ?
+mkdir -p F:/microsvc
+git clone https://github.com/devopshydclub/emartapp.git
+Or
+git clone git@github.com:devopshydclub/emartapp.git
+cd emartapp
+code .
+We need to get information from developer of the build commands to use to get the artifact & artifact path
+Open client > Dockerfile
+#Multi-stage Dockerfile
+#1st stage build artifact
+FROM node:14 AS web-build
+WORKDIR /usr/src/app # location within the container filesystem where commands are
+					 # executed.
+COPY ./ ./client  # copy everything from current directory(/usr/src/app) to
+                  # /usr/src/app/client
+RUN cd client && npm install && npm run build --prod
+#2nd stage copy artifact into main image
+# Use official nginx image as the base image
+FROM nginx:latest
+
+# Copy the build output to replace the default nginx contents.
+COPY --from=web-build /usr/src/app/client/dist/client/ /usr/share/nginx/html
+# ask developer when you run build command where will be artifact stored, here  
+# artifact path is /usr/src/app/client/dist/client/ & those HTML files will be 
+# copied to /usr/share/nginx/html location (read documentation of nginx image on 
+# dockerhub)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+# copying nginx configuration file to this path
+
+# Expose port 4200
+EXPOSE 4200
+
+open nginx.conf 
+location / means if someone access nginx container on root path (/) then show the content from /usr/share/nginx/html & index.html or index.htm page will be loaded
+
+open nodeapi > Dockerfile check this also
+open javaapi > Dockerfile check this also
+open nginx > default.conf we will attach this file as a volume to nginx image so we dont need to build seperate nginx image. This configuration is loaded by nginx container.This file contains routing rules for / for client container, /api for node container, /webapi for java container 
+open nginx > docker-compose.yaml
+version: "3.8"
+services:
+  client:
+    build:
+      context: ./client   #Dockerfile path for client container
+    ports:
+      - "4200:4200"  # host_machine_port:container_port
+    container_name: client
+    depends_on:  # first it will create api & webapi container & then client 
+				 #	container
+      - api
+      - webapi
+  api:
+    build:
+      context: ./nodeapi
+    ports:
+      - "5000:5000"
+    restart: always
+    container_name: api
+    depends_on:  # first nginx & emongo container created then api container
+      - nginx
+      - emongo
+  webapi:
+    restart: always  # if emartdb container take time to start webapi container
+					 # fails & if it fails it should restart automatically
+    build:
+      context: ./javaapi
+    ports:
+      - "9000:9000"
+    restart: always
+    container_name: webapi
+    depends_on:  # first emartdb container starts then webapi container
+      - emartdb
+  nginx:
+    restart: always
+    image: nginx:latest
+    container_name: nginx
+    volumes: # mapping nginx default config file to default conf of container
+      - "./nginx/default.conf:/etc/nginx/conf.d/default.conf"
+    ports:
+      - "80:80"
+	command: ['nginx-debug', '-g', 'daemon off']
+	depends_on:
+		[client]
+  emongo:
+    image: mongo:4
+    container_name: emongo
+    environment:
+      - MONGO_INITDB_DATABASE=epoc
+    ports:
+      - "27017:27017"
+  emartdb:
+    image: mysql:8.0.33
+    container_name: emartdb
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=emartdbpass
+      - MYSQL_DATABASE=books
+
+Containarizing means writing Dockerfiles & docker compose file & configuration if it is required in your microservices
+Know the build process & hosting methods for e.g Angular returns HTML files & we can run those files on nginx or apache, if its Java we can host artifacts directly on JDK or tomcat containers, if its NodeJS we can host artifact on NodeJS itself
+
+012 Build & run microservices app :
+Launch EC2 > DockerEngine > Ubuntu 20.04 > t3.medium > dockerkey > Allow ssh from MyIP, Allow HTTP > Configure storage : 20 GB > user data >
+#!/bin/bash
+
+# Install docker on Ubuntu
+sudo apt-get update
+   sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release -y
+   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+   echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install docker-compose
+   sudo apt-get update
+   sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+   sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+   sudo chmod +x /usr/local/bin/docker-compose
+
+# Add ubuntu user into docker group
+    sudo usermod -a -G docker ubuntu
+
+ssh EC2 > run commands : id, docker-compose, 
+git clone https://github.com/devopshydclub/emartapp.git
+cd emartapp
+docker-compose build 
+docker images : we see all the images & images with no name are build images
+#docker-compose up (-d for background run): we get 5 containers 
+docker-compose up -d
+publicIP:80 in browser we see emart app website 
+docker ps
+docker log <container_name>
+docker-compose ps 
+docker-compose stop 
+docker-compose down : stop & remove all containers
+first time docker-compose build will take time , when we run same command after pulling latest code from git it will build only changes (not build from scratch)

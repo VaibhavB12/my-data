@@ -1,0 +1,76 @@
+Linux have 6 ttys by default
+ps  - to check current terminal
+ext3, ext4, xfs - filesystems linux
+
+/ - where OS is stored, not related to the root account
+/bin Binaries and other executable programs.
+/etc System configuration files.
+/home Home directories.
+/opt Optional or third party software.
+/tmp Temporary space, typically cleared on reboot.
+/usr User related programs.
+/var Variable data, most notably log files.
+
+Search or locate file -
+• $ which ls
+• $ whereis ls
+• $ locate ls
+• $ find . -name “*.txt”
+
+tac - view file from backwards
+head - print first 10 lines
+tail - print last 10 lines
+file <name> - will give type of file
+
+$who : list of users currently logged in (-a option for detailed info)
+$whoami : current user
+$adduser : adding a user
+$deluser : deleting a user
+$usermod : modify user account $ usermod -G wheel username
+$groupadd : add a group (Ex - $groupadd <groupname>)
+(cat /etc/group file contains group and user information )
+$id <username> : gives details about user
+$adduser <un> <gn> : adding user to an existing group
+$usermod -G groupname username
+
+Chown : Used to change user ownership of a file or directory
+Eg : $chown <username> <filename>
+$chown <username>:<groupname> <filename>
+Chgrp : Used to change group ownership
+Eg : $chgrp <username/groupname> <filename>
+
+
+rwx: rwx: rwx   421
+user/owner: group: others
+chmod : used to change permission of file/directory
+
+ps
+ps –u <username>
+ps –ef
+ps –eLf
+
+crontab –e
+minute(0-59) hour(0-23, 0 = midnight) day(1-31) month(1-12) weekday(0-6,0=Sunday) /path/to/command
+* * * * * /home/ec2-user/test-cron-job.sh
+chmod 755 /home/ec2-user/test-cron-job.sh
+crontab –l
+
+we share public key to remote host & use private key to login
+ssh-keygen -y -f private-key.pem  : used to generate an SSH public key from an existing SSH private key
+~ : /home/ec2-user
+cat ~/.ssh/id.rsa    
+.ssh directory permissions should be “drwx------” i.e 
+
+scp –i key.pem -v file.txt ec2-user@hostname:~/
+hostnamectl set-hostname “myserver.example.com”
+cat /etc/hosts   :  to translate hostnames to IP addresses
+Block website : vi /etc/hosts  > 127.0.0.1 www.facebook.com
+
+YUM : package management tool for RPM (RedHat Package Manager) based Linux systems.
+allows users to easily install, update, remove or search software packages
+
+SymLinks are similar to shortcuts in Windows.
+Softlink is like shortcut in windows if we delete original file then softlink will not work.As both of the files have different inode numbers we can create softlink on different filesystems.Changes made in one file will reflect into other file automatically.
+Hardlink is like replica of a original file. 
+Soft links are similar to shortcuts, and are independent files with their own inode on hard disk.You can modify or delete a symbolic link without affecting the target file or directory.
+Hard links are directory entries that directly point to the same inode as the original file.Hard links are also shortcuts for files and folders, but a hard link cannot be created for a folder or file in a different file system. If you modify one hard link, all other hard links gets modfied

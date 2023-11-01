@@ -1,0 +1,261 @@
+
+Automation history :
+Bash/Batch scripting  - OS Automation
+Python/PERL/Ruby - 
+Powershell
+Puppet  - configuration management
+Salt stack
+Chef
+Ansible - written in python
+Terraform - cloud specific automation
+
+use cases of Ansible -  
+1.Automation : Any system automation, Linux automation, Windows automation, you want to  set up web services, database services, configuration, start the services, restart the services,  you can do all those kinds of automation by using Ansible.  
+2.Change management : you can manage your production machines.  Any changes to your production server, you can do it through Ansible.  If you write a proper Ansible playbooks, it can go directly into your documentation.  It's not going to be very complicated script to understand.  If you give right titles to your task in Ansible playbook, you can use that in the documentation  also 
+3.Provisioning :  You want to set up anything from the scratch as I said, you can use an Ansible to launch cloud instances also, like EC2 instance,  you can launch and then you can set up services on it, like any front end, backend, database,  web services, complete provisioning you can do through Ansible  
+4.Orchestration :  Large scale automation combining multiple automation tools and scripts together and execute them in a proper order. You can integrate Ansible with various other tools like Jenkins or any other continuous integration tool or cloud services you can integrate with Ansible.So there's so much of integration with different tools and services Ansible provides so you can do complete orchestration.  
+No agents : So you don't have any agents in Ansible like in Puppet Chef, Solstack, you have the servers and to manage all the machines from those server, you need to install agent on all the target machines.So if you're managing hundred servers through Puppet Chef or Solstack, you need to install  agents in all those hundred machines.  In Ansible, you don't need to do that. 
+Ansible uses existing connection.  Like for Linux, it uses SSH for Windows, it uses WinRM or it has API based modules also.  So based on the target, it will use the right communication methods in its module. So you don't need to have any agent, you don't need to do any setup.  
+No databases : And there are no databases and complicated storage in Ansible.  They have YAML, INI or text format where you have your playbooks, your scripts, your configuration  in these formats, very simple formats.  The output is returned into JSON format.  
+No complex setup : The setup is very simple of Ansible, it's just a Python library.  So you can say pip install Ansible also or you can install Ansible through package managers.  If you want to upgrade them, again upgrade is also very simple.  So you install Ansible and just get started with it like that.  
+No residual software : So you write the Ansible code, the playbooks.  It's going to create some Python scripts for that.  Execute it on a target and return the output.  There's no residual software left on the target or even on the same machine.  
+Ansible scripts or Ansible playbook we call it is written in YAML format, which is very  easy to read, which is very easy to write.  It's structured and has really very less complication compared to any programming language.Ansible has a lot of modules to do a particular task.  So apart from its system modules, it has modules which are API based, like you want to launch  an EC2 instance from Ansible, you can do that.  So in that case, Ansible will be using some API based tools to connect.  So being specific for AWS, it uses BOTTO that uses API.  So you can make URL or RESTful calls from Ansible.  You can also execute your existing shell command or Windows power shell commands from  Ansible. Any existing scripts you have shell scripts, you can execute that also through Ansible.  
+How does Ansible connects to its target?  
+Now target being it could be a Linux server, Windows server, it could be a cloud account,  it could be a database, it could be network equipments.So for Linux, as I said, it is going to use SSH.So every Linux server will have SSH running and I said server.And any Linux server, you take Linux server operating system or Ubuntu server, Centos, RHEL will have SSH running.  So you don't need to set up anything. You just need SSH detail and Ansible can connect to Linux machine using SSH.  
+For Windows, it uses WIN RM.  Again, there will be VIN RM service already there.  You just need to enable a remote connection. In Windows, PowerShell, you have to enable the remote connection. So you can connect to Windows through WIN RM connection from remotely.  
+For cloud like AWS, Azure, Google Cloud or any other cloud, it uses APIs.  
+Apart from that, you can also manage network devices like switches and routers through  Ansible or even databases.  So a database, it's going to use its own Python libraries.  Like for MySQL, it has Python MySQL library.  
+So my point is you don't need to set up any agent on the destination or in the server  itself.  Well, by the way, there is no server in Ansible.  Ansible is called as control machine.  In generally it you don't call it Ansible server because it doesn't run any service like  puppet server, it runs a service.  That's why it's puppet server, chef's server, because it runs a service, a salt master,  salt server, it runs the service, but Ansible does not run any service.  It just uses the Python modules, Python scripts to connect to the target machine, dump the  Python script there, execute it, return the output.  
+Okay, for VIN RM or SSH, it's going to send the Python script to the destination execute  and return the output.  But for API task, it's going to execute on the control machine locally.  Okay, there's no place where it's going to send the scripts.  It's going to execute all the scripts locally.  So you have remote execution in Ansible and you have local execution also.  And that totally depends on the target and you don't need to really mention anything.  You just use a module and you mentioned the destination.  All those things are abstracted from you.  Ansible will do all the kind of connection and execution behind the scene.  
+Architecture of Ansible :  You have to create an inventory file in inventory file, you will have the target machine information, like IP address, user names,  password will be mentioned in the inventory file. Ansible has lots of modules in built modules that are supposed to do a particular task.  For example, installing a package or restarting a service or taking snapshot of EBS volume.  So like that, there are hundreds and more than 1000 modules in Ansible.  
+WE WRITE PLAYBOOK AND WE MENTION IN THE INVENTORY FILE THAT THIS IS THE HOST AND I WANT TO EXECUTE SO AND SO MODULE ON THIS HOST. SO THAT WILL BE A TASK IN PLAYBOOK.  WE MENTIONED THE DESTINATION MACHINE IN THE INVENTORY AND MODULE NEEDS TO GET EXECUTED. THEN ANSIBLE IS GOING TO USE THE CONFIGURATION CREATE PYTHON SCRIPTS, PYTHON PACKAGES, PYTHON PACKAGE MEANS GROUP OF PYTHON MODULES.LIKE WE HAVE SEEN PYTHON GROUP OF FUNCTIONS TOGETHER.  WE CREATED A MODULE LIKE THAT GROUP OF MODULE IS CALLED AS PYTHON PACKAGE.  SO WHEN YOU EXECUTE, IT'S GOING TO CREATE PYTHON PACKAGE, DELIVER IT TO THE DESTINATION.  LET'S SAY LINUX SERVER EXECUTES THERE AND RETURNS THE OUTPUT.  IF THE TARGET IS NOT OPERATING SYSTEM, PROBABLY A CLOUD ACCOUNT, YOU'RE LAUNCHING EASY TO  INSTANCE.LET'S SAY, SO IT'S GOING TO CREATE PYTHON PACKAGE AND EXECUTE LOCALLY.
+Simplicity is beauty and you have to take care of that in Ansible.  Ansible is very simple to use tool compared to other automation and scripts.  But it has lots of features use the features if you need it throughout this Ansible sessions.  We are going to use various Ansible features, but we'll use it when the need comes and I'll  make sure that need comes so you learn all those features.  But keep in mind, Ansible was built on the principle of simplicity.  So try to keep your code as simple as possible.  Being so simple Ansible is also very powerful.  You can do variety of things with Ansible as I already told you.  Always automation cloud automation, you can execute commands, you can execute API task,  you can execute scripts.  So as being so powerful, you can use Ansible to do anything in your infrastructure and  you can replace all the other automation tools and just use Ansible.  But again, it depends on the need and use case also.  Like if you're doing too much cloud automation, managing a lot of things on cloud account,  I think Terraform will be better than Ansible for cloud automation.  Likewise, you make your choice based on your need.  But when the time come, Ansible can do most of the automation that you need.  Okay, enough talk.  Now let's get into some action.   
+Apart from that, you can also manage network devices like switches and routers through  Ansible or even databases.  So a database, it's going to use its own Python libraries.  Like for MySQL, it has Python MySQL library.  So my point is you don't need to set up any agent on the destination or in the server  itself.  Well, by the way, there is no server in Ansible.  Ansible is called as control machine.  And generally it you don't call it Ansible server because it doesn't run any service like  puppet server, it runs a service.  That's why it's puppet server, chef's server, because it runs a service, a salt master,  salt server, it runs the service, but Ansible does not run any service.  It just uses the Python modules, Python scripts to connect to the target machine, dump the  Python script there, execute it, return the output.  Okay, for VIN RM or SSH, it's going to send the Python script to the destination execute  and return the output.  But for API task, it's going to execute on the control machine locally.  Okay, there's no place where it's going to send the scripts.  It's going to execute all the scripts locally.  So you have remote execution in Ansible and you have local execution also.  And that totally depends on the target and you don't need to really mention anything.  You just use a module and you mentioned the destination.  All those things are abstracted from you.  Ansible will do all the kind of connection and execution behind the scene.  So there is no really great architecture of Ansible.  This is just for an understanding purpose.  How it really works executes.  So you have to create an inventory file in inventory file.  You will have the target machine information, like for example, IP address, user names,  password will be mentioned in the inventory file.  Ansible has lots of modules in built modules that are supposed to do a particular task.  For example, installing a package or restarting a service or taking snapshot of EBS volume.  So like that, there are hundreds and more than 1000 modules in Ansible.  You write playbook and you mention from the inventory file that this is the host and I  want to execute so and so module on this host.  So that will be a task in playbook.  Okay, you mentioned the destination anywhere from the inventory.  This is the host and this module needs to get executed.  Then Ansible is going to use the configuration create Python scripts, Python packages, Python  package means group of Python modules.  Like we have seen Python group of functions together.  We created a module like that group of module is called as Python package.  So when you execute, it's going to create Python package, deliver it to the destination.  Let's say Linux server executes there and returns the output.  If the target is not operating system, probably a cloud account, you're launching easy to  instance.  Let's say, so it's going to create Python package and execute locally.  Simplicity is beauty and you have to take care of that in Ansible.  Ansible is very simple to use tool compared to other automation and scripts.  But it has lots of features use the features if you need it throughout this Ansible sessions.  We are going to use various Ansible features, but we'll use it when the need comes and I'll  make sure that need comes so you learn all those features.  But keep in mind, Ansible was built on the principle of simplicity.  So try to keep your code as simple as possible.  Being so simple Ansible is also very powerful.  You can do variety of things with Ansible as I already told you.  Always automation cloud automation, you can execute commands, you can execute API task,  you can execute scripts.  So as being so powerful, you can use Ansible to do anything in your infrastructure and  you can replace all the other automation tools and just use Ansible.  But again, it depends on the need and use case also.  Like if you're doing too much cloud automation, managing a lot of things on cloud account,  I think Terraform will be better than Ansible for cloud automation.  Likewise, you make your choice based on your need.  But when the time come, Ansible can do most of the automation that you need.  Okay, enough talk.  Now let's get into some action.   
+You don't need to write programming language to do any automation with Ansible, you have  YAML.  So Ansible scripts or Ansible playbook we call it is written in YAML format, which is very  easy to read, which is very easy to write.  It's structured and has really very less complication compared to any programming language.  That's why they say Ansible is easy to read and write.  Ansible has a lot of modules to do a particular task.  So apart from its system modules, it has modules which are API based, like you want to launch  an easy to instance from Ansible, you can do that.  So in that case, Ansible will be using some API based tools to connect.  So being specific for AWS, it uses BOTTO that uses API.  So you can make URL or RESTful calls from Ansible.  You can also execute your existing shell command or Windows power shell commands from  Ansible.  Any existing scripts you have shell scripts, you can execute that also through Ansible.  Now how does Ansible connects to its target?  Now target being it could be a Linux server, Windows server, it could be a cloud account,  it could be a database, it could be network equipments.  So for Linux, as I said, it is going to use SSH.  So every Linux server will have SSH running and I said server.  Yeah.  And any Linux server, you take Linux server operating system or Ubuntu server, send to  us, RHL will have SSH running.  So you don't need to set up anything.  You just need SSH detail and Ansible can connect to Linux machine using SSH.  For Windows, it uses VIN RM.  Again, there will be VIN RM service already there.  You just need to enable a remote connection.  In Windows, PowerShell, you have to enable the remote connection.  So you can connect to Windows through VIN RM connection from remotely.  For cloud like AWS, Azure, Google Cloud or any other cloud, it uses APIs.  Apart from that, you can also manage network devices like switches and routers through  Ansible or even databases.  So a database, it's going to use its own Python libraries.  Like for MySQL, it has Python MySQL library.  So my point is you don't need to set up any agent on the destination or in the server  itself.  Well, by the way, there is no server in Ansible.  Ansible is called as control machine.  And generally it you don't call it Ansible server because it doesn't run any service like  puppet server, it runs a service.  That's why it's puppet server, chef's server, because it runs a service, a salt master,  salt server, it runs the service, but Ansible does not run any service.  It just uses the Python modules, Python scripts to connect to the target machine, dump the  Python script there, execute it, return the output.  Okay, for VIN RM or SSH, it's going to send the Python script to the destination execute  and return the output.  But for API task, it's going to execute on the control machine locally.  Okay, there's no place where it's going to send the scripts.  It's going to execute all the scripts locally.  So you have remote execution in Ansible and you have local execution also.  And that totally depends on the target and you don't need to really mention anything.  You just use a module and you mentioned the destination.  All those things are abstracted from you.  Ansible will do all the kind of connection and execution behind the scene.  So there is no really great architecture of Ansible.  This is just for an understanding purpose.  How it really works executes.  So you have to create an inventory file in inventory file.  You will have the target machine information, like for example, IP address, user names,  password will be mentioned in the inventory file.  Ansible has lots of modules in built modules that are supposed to do a particular task.  For example, installing a package or restarting a service or taking snapshot of EBS volume.  So like that, there are hundreds and more than 1000 modules in Ansible.  You write playbook and you mention from the inventory file that this is the host and I  want to execute so and so module on this host.  So that will be a task in playbook.  Okay, you mentioned the destination anywhere from the inventory.  This is the host and this module needs to get executed.  Then Ansible is going to use the configuration create Python scripts, Python packages, Python  package means group of Python modules.  Like we have seen Python group of functions together.  We created a module like that group of module is called as Python package.  So when you execute, it's going to create Python package, deliver it to the destination.  Let's say Linux server executes there and returns the output.  If the target is not operating system, probably a cloud account, you're launching easy to  instance.  Let's say, so it's going to create Python package and execute locally.  Simplicity is beauty and you have to take care of that in Ansible.  Ansible is very simple to use tool compared to other automation and scripts.  But it has lots of features use the features if you need it throughout this Ansible sessions.  We are going to use various Ansible features, but we'll use it when the need comes and I'll  make sure that need comes so you learn all those features.  But keep in mind, Ansible was built on the principle of simplicity.  So try to keep your code as simple as possible.  Being so simple Ansible is also very powerful.  You can do variety of things with Ansible as I already told you.  Always automation cloud automation, you can execute commands, you can execute API task,  you can execute scripts.  So as being so powerful, you can use Ansible to do anything in your infrastructure and  you can replace all the other automation tools and just use Ansible.  But again, it depends on the need and use case also.  Like if you're doing too much cloud automation, managing a lot of things on cloud account,  I think Terraform will be better than Ansible for cloud automation.  Likewise, you make your choice based on your need.  But when the time come, Ansible can do most of the automation that you need.  Okay, enough talk.  Now let's get into some action.   
+
+002
+Launch 4 EC2 :
+Control machine - Ubuntu 18 - User data - Control-SG ssh MyIP - control-key
+	#!/bin/bash
+	sudo apt update -y
+	sudo apt install software-properties-common -y
+	sudo add-apt-repository --yes --update ppa:ansible/ansible
+	sudo apt install ansible -y
+web01, web02 - Centos7 - vprofile-web-sg ssh MyIP, CustomTCP 22 Control-SG - vprofileweb-key
+db01 - Centos7 - vprofile-db-sg ssh MyIP, CustomTCP 22 Control-SG - vprofileweb-key
+ssh control machine > ansible --version - ansible installs python 2 coz it has lot of dependencies on python 2
+mkdir vprofile && cd vprofile
+mkdir exercise1 && cd exercise1
+
+003 
+INVENTORY & PING :
+login control machine cd vprofile/exercise1 
+default inventory file at /etc/ansible/hosts
+from windows - scp -i vprofile-key.pem vprofile-key.pem centos@publicIP: /home/cen- tos/ vprofile/exercise1
+login control machine cd vprofile/exercise1 
+vim inventory > 
+# hostname	IP_Address	login_user	private_key - these are variables in inventory file
+web01	ansible_host=privateIPweb01	ansible_user=centos ansible_ssh_private_key_file=vprofile-key.pem
+web02	ansible_host=privateIPweb02	ansible_user=centos ansible_ssh_private_key_file=vprofile-key.pem
+db01	ansible_host=privateIPdb01	ansible_user=centos ansible_ssh_private_key_file=vprofile-key.pem
+
+ansible -i inventory -m ping web01 > no : this checks host key but we dont want it coz whenever we add target machine its going to ask us for host key
+ping module for linux will do ssh & winping module for windows will do ssh
+so we edit ansible global configuration file 
+sudo vim /etc/ansible/ansible.cfg > /host_key
+uncomment line host_key_checking = False  : it will not do host key check
+ansible -i inventory -m ping web01  : we will see SUCCESS
+ansible -i inventory -m ping web02  : we will see SUCCESS
+ansible -i inventory -m ping db01  : we will see SUCCESS
+If we have 10 target machine then its difficult to type & run command for each target machine so we create groups of these target hosts in inventory
+we create 2 groups in inventory 1.websrvgrp for web01,web02 2.dbsrvgrp db01
+We also create group of groups dc_ohio:children for websrvgrp & dbsrvgrp. Here dc_ohio is parent group & in that we define children groups  
+
+vim inventory  
+web01	ansible_host=privateIPweb01	ansible_user=centos ansible_ssh_private_key_file=vprofile-key.pem
+web02	ansible_host=privateIPweb02	ansible_user=centos ansible_ssh_private_key_file=vprofile-key.pem
+db01	ansible_host=privateIPdb01	ansible_user=centos
+ansible_ssh_private_key_file=vprofile-key.pem
+[websrvgrp]
+web01
+web02
+[dbsrvgrp]
+db01
+[db_ohio:children] # dont use hyphen
+websrvgrp
+dbsrvgrp
+
+ansible -i inventory -m ping websrvgrp  : we see SUCCESS
+ansible -i inventory -m ping dbsrvgrp : we see SUCCESS
+ansible -i inventory -m ping dc_ohio : we see SUCCESS
+ansible -i inventory -m ping all  : it will ping all the groups 
+ansible -i inventory -m ping '*'
+
+we can also define variable at group level [websrvgrp:vars]
+If we have same variable defined at host & group level, host variable have higher priority.So we remove variable at host level & instead of defining websrvgrp we will define it for parent group [db_ohio:childrens]
+vim inventory  
+web01	ansible_host=privateIPweb01
+web02	ansible_host=privateIPweb02	
+db01	ansible_host=privateIPdb01	
+[websrvgrp]
+web01
+web02
+[dbsrvgrp]
+db01
+[dc_ohio:children]
+websrvgrp
+dbsrvgrp
+[dc_ohio:vars]
+ansible_user=centos
+ansible_ssh_private_key_file=vprofile-key.pem
+
+ansible -i inventory -m ping '*'
+IMP : Inventory file contains host information, group information, parent group information & variables at group level.
+
+004 YAML & JSON
+Python dictionary - Above is python dictionary that has 3 keys DevOps, Development & ansible_facts.DevOps & Development key has value of list & ansible_facts has value of dictionary.
+{"DevOps": ["AWS", "Jenkins", "Python", "Ansible"], "Development": ["Java", "NodeJS", ".net"], "ansible_facts":{"python": "/usr/bin/python"}}
+
+JSON -
+{
+  "DevOps": 
+  [
+	"AWS", 
+	"Jenkins", 
+	"Python", 
+	"Ansible"
+	],
+  "Development": 
+  [
+	"Java", 
+	"NodeJS", 
+	".net"
+	],
+  "ansible_facts": 
+  {
+    "python": "/usr/bin/python"
+  }
+}
+
+YAML - No quotes, Commas Only indentations, list with hyphen 
+3 keys DevOps, Development, ansible_facts whose values are list, list & dictionary
+DevOps: list
+  - AWS
+  - Jenkins
+  - Python
+  - Ansible
+Development: list
+  - Java
+  - NodeJS
+  - .net
+ansible_facts: dictionary
+  python: /usr/bin/python
+  version: 2.7  
+
+Example : list of dictionary 
+- martin:
+    name: Martin D'vloper
+    job: Developer
+    skills:
+      - python
+      - perl
+      - pascal
+- tabitha:
+    name: Tabitha Bitumen
+    job: Developer
+    skills:
+      - lisp
+      - fortran
+      - erlang  
+
+{
+  "martin": {
+    "name": "Martin D'vloper",
+    "job": "Developer",
+    "skills": ["python", "perl", "pascal"]
+  },
+  "tabitha": {
+    "name": "Tabitha Bitumen",
+    "job": "Developer",
+    "skills": ["lisp", "fortran", "erlang"]
+  }
+}
+
+martin:
+    name: Martin D'vloper
+    job: Developer
+    skills:
+      - python
+      - perl
+      - pascal
+tabitha:
+    name: Tabitha Bitumen
+    job: Developer
+    skills:
+      - lisp
+      - fortran
+      - erlang  	  
+
+{
+  "martin": {
+    "name": "Martin D'vloper",
+    "job": "Developer",
+    "skills": [
+      "python",
+      "perl",
+      "pascal"
+    ]
+  },
+  "tabitha": {
+    "name": "Tabitha Bitumen",
+    "job": "Developer",
+    "skills": [
+      "lisp",
+      "fortran",
+      "erlang"
+    ]
+  }
+}
+
+005 
+cd vprofile 
+cp -r exercise1 exercise2 
+cd exercise2
+ansible -i inventory -m ping all
+ansible -i inventory -m yum -a "name=httpd state=present" web01  : we see error we need to have sudo permissions to run this command, --become gives sudo privileges
+tail -5 inventory   : we see user as centos
+ansible -i inventory -m yum -a "name=httpd state=present" web01 --become  : we see CHANGED & changed:true in yellow means package is installed
+If we run same command again we see SUCCESS & changed:false this is because of idempotent nature which means if the system is in same state, its not going to apply changes again.
+ansible -i inventory -m service -a "name=httpd state=started enabled=yes" web01 --become
+vim index.html > This is deployed by Ansible
+ansible -i inventory -m copy -a "src=index.html dest=/var/www/html/index.html" web01 --become
+Run this command again we see SUCCESS & changed:false but if we change index.html & run command again we will see CHANGED & changed:true
+vim index.html > This is deployed by Ansible & we have changed this file
+ansible -i inventory -m copy -a "src=index.html dest=/var/www/html/index.html" web01 --become
+we see CHANGED & changed:true, coz src index file is different that dest index file.
+Ansible uses checksum value for copy module for checking changes.
+EC2 web01 > Security group > CustomTCP 80 MyIP > run publicIP:80 in browser
+
+
+
+
+Ansible for AWS :
+Authentication - create IAM user with secret & access keys and we export these values so that ansible can connect to AWS account
+vim ~/.bashrc > at the end of file add 
+export AWS_ACCESS_KEY_ID='AccessKey'
+export AWS_SECRETE_ACCESS_KEY='SecretKey'
+source .bashrc
+logout & login again
+mkdir aws && cd aws
+vim test-aws.yaml  host > 
+- host: localhost  
+  gather_facts: False
+  tasks:
+    - name: Create key pair
+	  ec2_key:
+	    name: sample
+Ansible is written in python & python needs some libraries to access AWS services .We use boto module to access AWS services
+sudo apt install python-pip -y
+pip install boto3
+ansible-playbook test-aws.yaml 
+

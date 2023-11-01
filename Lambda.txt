@@ -1,0 +1,215 @@
+Lambda, API Gateway, DynamoDB, Step functions
+Serverless uses servers but we dont have to manage them cloud provider takes care of it.We write the code in form of functions & these functions then run in the cloud.
+We segregate our application logic into small independent functions or microservices & upload to cloud provider. Then these functions are invoked in response to different events like file upload, database updates, in-app activity, API calls, website clicks, sensor output from IOT devices.All of this managed without having infrastructure.
+These serverless function run in docker containers & hence several instances of these functions can be run concurrently in docker swarm making them highly scalable.
+Serverless means "Event driven computing using small independent stateless functions running inside containers in the cloud"
+AWS lambda allows you to create & run serverless functions in the cloud.
+
+
+====================================================================================
+API allows two applications talk to each other. The Request and Response of data passed between two applications happens via API.
+API is a set of rules and protocols that allows different software applications to communicate with each other.Client request some data from server & server sends the data back to client in response.
+The client uses GET, POST, PUT DELETE HTTP methods to communicate with the server.
+An API Gateway is a serverless service from AWS which allows us to create
+REST(Representational State Transfer) APIs that are going to be public and
+accessible to the clients. 
+
+
+
+
+====================================================================================
+
+Certainly! Boto3 is the AWS SDK for Python and provides a wide range of functionalities for interacting with AWS services. Here are some common use cases for Boto3:
+
+Managing EC2 Instances:
+
+Launching, terminating, starting, and stopping Amazon EC2 instances.
+Configuring security groups, key pairs, and instance types.
+Creating and managing Amazon Machine Images (AMIs).
+S3 Bucket Operations:
+
+Creating, deleting, and managing S3 buckets.
+Uploading, downloading, and deleting objects from S3 buckets.
+Setting access policies and configuring versioning.
+DynamoDB Data Access:
+
+Creating and managing DynamoDB tables.
+Adding, updating, and deleting items in tables.
+Querying and scanning data in DynamoDB tables.
+SNS and SQS Messaging:
+
+Sending and receiving messages from Amazon Simple Queue Service (SQS) queues.
+Publishing and subscribing to topics in Amazon Simple Notification Service (SNS).
+Lambda Function Management:
+
+Creating, updating, and deleting AWS Lambda functions.
+Invoking Lambda functions programmatically.
+Configuring event sources and triggers.
+IAM User and Role Management:
+
+Creating and managing IAM users, groups, and roles.
+Defining and updating permissions and policies for IAM entities.
+Route 53 DNS Operations:
+
+Managing Route 53 hosted zones, records, and health checks.
+Configuring DNS settings and domain registration.
+CloudWatch Metrics and Alarms:
+
+Retrieving CloudWatch metrics and alarms data.
+Creating and managing CloudWatch alarms.
+Elastic Beanstalk Deployment:
+
+Deploying, updating, and managing AWS Elastic Beanstalk applications.
+Configuring environments, versions, and application settings.
+RDS Database Management:
+
+Creating and managing Amazon RDS database instances.
+Performing database backups, restores, and snapshots.
+SES Email Sending:
+
+Sending emails through Amazon Simple Email Service (SES).
+Managing email templates and verified identities.
+Kinesis Stream Processing:
+
+Working with Amazon Kinesis data streams.
+Sending and receiving streaming data.
+Transcribe and Translate:
+
+Using Amazon Transcribe for automatic speech recognition.
+Using Amazon Translate for language translation.
+Rekognition Image and Video Analysis:
+
+Analyzing images and videos for content, faces, and objects.
+Step Functions State Machines:
+
+Defining and managing AWS Step Functions state machines and workflows.
+CloudFormation Stack Management:
+
+Creating, updating, and deleting CloudFormation stacks.
+Describing and managing stack resources.
+ECS and ECR Container Services:
+
+Managing Amazon Elastic Container Service (ECS) clusters, tasks, and services.
+Working with Amazon Elastic Container Registry (ECR) for Docker image storage.
+Glacier Archive and Retrieval:
+
+Storing and retrieving data using Amazon Glacier for long-term archiving.
+Redshift Data Warehouse Operations:
+
+Managing Amazon Redshift data warehouse clusters and databases.
+SageMaker Machine Learning:
+
+Building, training, and deploying machine learning models using Amazon SageMaker.
+These are just a few examples of the extensive capabilities that Boto3 provides for AWS service interaction. Boto3 makes it easier for developers to automate and manage AWS resources programmatically from Python applications. The choice of use cases depends on your specific AWS infrastructure and application requirements.
+
+
+
+
+create a Lambda function that identifies EBS snapshots that are no longer associated with any active EC2 instance and deletes them to save on storage costs.
+Event object : event related data or request object is received here
+Trigger is to schedule this as in AmazonEventBridge event with cron
+manages EBS snapshots by deleting them under specific conditions
+1.when they are not attached to any volume
+2.when they are older than 6 months, 
+3.when their associated volumes no longer exist
+4.are not attached to running instances.
+
+# imports boto3 for AWS SDK and datetime & timedelta from the datetime module to 
+# work with dates and time durations
+import boto3
+from datetime import datetime, timedelta
+
+# lambda_handler function, which is the entry point for your AWS Lambda function
+def lambda_handler(event, context):
+# Create an EC2 client using boto3 which allows your Lambda function to interact 
+# with Amazon Elastic Compute Cloud (EC2) services.
+    ec2 = boto3.client('ec2')
+
+# uses the describe_snapshots method to retrieve information about all EBS (Elastic # Block Store) snapshots owned by the AWS account ('self' indicates snapshots owned # by the Lambda function's AWS account
+    response = ec2.describe_snapshots(OwnerIds=['self'])
+
+# Get the current date and time
+    current_date = datetime.now()
+
+# Iterate through each EBS snapshot obtained in the response variable above
+    for snapshot in response['Snapshots']:
+# Extract the SnapshotId from the snapshot which is the unique identifier for the 
+# snapshot
+        snapshot_id = snapshot['SnapshotId']
+
+# retrieves the VolumeId associated with the snapshot, if it exists.It uses .get()
+# to handle cases where the VolumeId might be missing.
+        volume_id = snapshot.get('VolumeId')
+
+# Extract the start time of the snapshot and remove the timezone information
+        snapshot_date = snapshot['StartTime'].replace(tzinfo=None)
+
+        # Calculate the age of the snapshot by finding the difference between the current date and the snapshot's start time
+        snapshot_age = current_date - snapshot_date
+
+        if not volume_id:
+            # Delete the snapshot if it's not attached to any volume
+            ec2.delete_snapshot(SnapshotId=snapshot_id)
+            print(f"Deleted EBS snapshot {snapshot_id} as it was not attached to any volume.")
+        elif snapshot_age >= timedelta(days=180):
+            # Delete the snapshot if it's older than 6 months (180 days)
+            ec2.delete_snapshot(SnapshotId=snapshot_id)
+            print(f"Deleted EBS snapshot {snapshot_id} as it's older than 6 months.")
+        else:
+            # Check if the associated volume still exists
+            try
+
+
+====================================================================================
+Serverless : Cloud provider manages the allocation of infrastructure resources we dont have to worry about managing infrastructure & resources
+Lambda is event driven serverless compute service provided by AWS.Code that we run on lambda is lambda function.Lambda can be triggered by various event sources like API gateway calls, S3 file uploads, changes in DynamoDB table data, cloudwatch events, SNS notifications, IOT devices etc.We are only charged when lambda function run & billing done in increments of 100 mili seconds of compute time.1 million requests per month are free.
+Lambda supports various runtimes like python, nodejs, c#, java.We can set environment variables & access them inside code, if environment variables are sensitive then we can use KMS encryption.
+We can create policies & attach them to the role to provide permission to your lambda function. We can also set max memory that function requires.Max memory is 3008 mb.
+Lambda function can run upto 15 minutes maximum & default time is 3 seconds.
+We segregate our application logic in multiple lambda function each permforming one specific task.
+We can attach lamba function to VPC so the function will run within that specific VPC & resources outside VPC can not access resource inside VPC.
+For debugging & error handling we use DLQ dead letter queues.When lambda function gives errors even after multiple retries then lambda send these events to SNS or SQS.
+Concurrency defines maximum number of concurrent executions possible for lambda function.All AWS account has concurrency limit of 1000.We can reserve concurrency limit for a specific lambda function.
+We can also set auditing of lambda logs using cloudtrail.
+Throttle (limit) your lambda function in a case of emergency.
+Function policy used by triggering event or service to invoke lambda function.
+Execution role used by the lambda function to access different AWS services.
+Lambda invocation types : Depends on event source
+Synchronous - API gateway, Cognito
+Asyynchronous - S3 
+We can chose invocation type by incoke method of AWS SDK either synchronous or asynchronous
+Lambda event sources types :
+Push based - push the event data to lambda to invoke the function e.g S3 event, API gateway event.
+Pull based - lambda polls event stream to look for the event data.E.g DynamoDB pull event, kinesis pull event, SQS queue event.Lambda pulls data from these services & invoke the lambda function.
+Lambda handler parameters :1.Event 2.Context
+Event object :
+Each event source have its own predefined event data structure & we write lambda function according to the events that it needs to process.For e.g for API gateway we have parameters like body of the message, http method parameter, query string parameter, path parameter 
+Context :
+Provides useful runtime information while lambda function is executing.For e.g how much time remaining before the lambda function times out, what cloudwatch log groups or log stream associated with lambda function, what is the AWS request ID of current invocation of lamba function. We cam get all this information using methods like context.getRemainingTimeInMillis, context.functionName, functionVersion, awsRequestId, logGroupName, logStreamName, memoryLimitInMB 
+
+
+API gateway : Allows us to create, publish & run secure APIs at any scale.With API gateway we can create API endpoints to integrate front-end applications with back-end applications using RESTful APIs over the HTTPS.
+API gateway contains one or more resources & each resource can have one or more HTTP methods like GET, POST, PATCH, DELETE.
+
+
+
+
+import json
+import boto3
+
+
+def lambda_handler(event, context):
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('tbl')
+    sno = event['sno']
+    try:
+        response=table.delete_item(Key={"sno":sno})
+        return "Done"
+    except:
+        raise
+		
+		
+Imports 
+Constants and Global Variables 
+Functions 
+Main Program Logic & Error Handling 
